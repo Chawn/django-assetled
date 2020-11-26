@@ -1,0 +1,307 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+	<!-- TODO: ฟอร์มค้นหา -->
+<style>
+	#ResultTable a:visited {
+		color: #6d3390;
+	}
+</style>
+	<form method="GET" action="" class=" mb-5">
+		<div class="row mb-3">
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td width="35%" class="text-right pr-1">
+								จังหวัด: 
+							</td>
+							<td width="65%" class="pr-3">
+								<input type="hidden" name="province" value="อุดรธานี">
+								<select class="search-box form-control" id="Province" name="province" disabled>
+									<option value="กรุงเทพ">กรุงเทพมหานคร</option>
+									<option value="กระบี่">กระบี่</option>
+									<option value="กาญจนบุรี">กาญจนบุรี</option>
+									<option value="กาฬสินธุ์">กาฬสินธุ์</option>
+									<option value="กำแพงเพชร">กำแพงเพชร</option>
+									<option value="ขอนแก่น">ขอนแก่น</option>
+									<option value="จันทบุรี">จันทบุรี</option>
+									<option value="ฉะเชิงเทรา">ฉะเชิงเทรา</option>
+									<option value="ชลบุรี">ชลบุรี</option>
+									<option value="ชัยนาท">ชัยนาท</option>
+									<option value="ชัยภูมิ">ชัยภูมิ</option>
+									<option value="ชุมพร">ชุมพร</option>
+									<option value="เชียงราย">เชียงราย</option>
+									<option value="เชียงใหม่">เชียงใหม่</option>
+									<option value="ตรัง">ตรัง</option>
+									<option value="ตราด">ตราด</option>
+									<option value="ตาก">ตาก</option>
+									<option value="นครนายก">นครนายก</option>
+									<option value="นครปฐม">นครปฐม</option>
+									<option value="นครพนม">นครพนม</option>
+									<option value="นครราชสีมา">นครราชสีมา</option>
+									<option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
+									<option value="นครสวรรค์">นครสวรรค์</option>
+									<option value="นนทบุรี">นนทบุรี</option>
+									<option value="นราธิวาส">นราธิวาส</option>
+									<option value="น่าน">น่าน</option>
+									<option value="บุรีรัมย์">บุรีรัมย์</option>
+									<option value="บึงกาฬ">บึงกาฬ</option>
+									<option value="ปทุมธานี">ปทุมธานี</option>
+									<option value="ประจวบคีรีขันธ์">ประจวบคีรีขันธ์</option>
+									<option value="ปราจีนบุรี">ปราจีนบุรี</option>
+									<option value="ปัตตานี">ปัตตานี</option>
+									<option value="พระนครศรีอยุธยา">พระนครศรีอยุธยา</option>
+									<option value="พะเยา">พะเยา</option>
+									<option value="พังงา">พังงา</option>
+									<option value="พัทลุง">พัทลุง</option>
+									<option value="พิจิตร">พิจิตร</option>
+									<option value="พิษณุโลก">พิษณุโลก</option>
+									<option value="เพชรบุรี">เพชรบุรี</option>
+									<option value="เพชรบูรณ์">เพชรบูรณ์</option>
+									<option value="แพร่">แพร่</option>
+									<option value="ภูเก็ต">ภูเก็ต</option>
+									<option value="มหาสารคาม">มหาสารคาม</option>
+									<option value="มุกดาหาร">มุกดาหาร</option>
+									<option value="แม่ฮ่องสอน">แม่ฮ่องสอน</option>
+									<option value="ยโสธร">ยโสธร</option>
+									<option value="ยะลา">ยะลา</option>
+									<option value="ร้อยเอ็ด">ร้อยเอ็ด</option>
+									<option value="ระนอง">ระนอง</option>
+									<option value="ระยอง">ระยอง</option>
+									<option value="ราชบุรี">ราชบุรี</option>
+									<option value="ลพบุรี">ลพบุรี</option>
+									<option value="ลำปาง">ลำปาง</option>
+									<option value="ลำพูน">ลำพูน</option>
+									<option value="เลย">เลย</option>
+									<option value="ศรีสะเกษ">ศรีสะเกษ</option>
+									<option value="สกลนคร">สกลนคร</option>
+									<option value="สงขลา">สงขลา</option>
+									<option value="สตูล">สตูล</option>
+									<option value="สมุทรปราการ">สมุทรปราการ</option>
+									<option value="สมุทรสงคราม">สมุทรสงคราม</option>
+									<option value="สมุทรสาคร">สมุทรสาคร</option>
+									<option value="สระแก้ว">สระแก้ว</option>
+									<option value="สระบุรี">สระบุรี</option>
+									<option value="สิงห์บุรี">สิงห์บุรี</option>
+									<option value="สุโขทัย">สุโขทัย</option>
+									<option value="สุพรรณบุรี">สุพรรณบุรี</option>
+									<option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+									<option value="สุรินทร์">สุรินทร์</option>
+									<option value="หนองคาย">หนองคาย</option>
+									<option value="หนองบัวลำภู">หนองบัวลำภู</option>
+									<option value="อ่างทอง">อ่างทอง</option>
+									<option value="อำนาจเจริญ">อำนาจเจริญ</option>
+									<option value="อุดรธานี" selected="">อุดรธานี</option>
+									<option value="อุตรดิตถ์">อุตรดิตถ์</option>
+									<option value="อุทัยธานี">อุทัยธานี</option>
+									<option value="อุบลราชธานี">อุบลราชธานี</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td width="35%" class="text-right pr-1">
+								เขต/อำเภอ: 
+							</td>
+							<td width="65%" class="pr-3">
+								<select class="search-box form-control" id="Ampur" name="ampur">
+									{% if search_a_ampur_value %}
+										<option value="{{ search_a_ampur_value }}" selected="">{{ search_a_ampur_text }}</option>
+									{% endif %}
+									<option value="">-ทุกอำเภอ-</option>
+									<option value="เมือง">เมือง</option> 
+									<option value="เมืองอุดรธานี">เมืองอุดรธานี</option> 
+									<option value="กุดจับ">กุดจับ</option> 
+									<option value="กุมภวาปี">กุมภวาปี</option> 
+									<option value="กู่แก้ว">กู่แก้ว</option> 
+									<option value="ไชยวาน">ไชยวาน</option> 
+									<option value="ทุ่งฝน">ทุ่งฝน</option> 
+									<option value="นายูง">นายูง</option> 
+									<option value="น้ำโสม">น้ำโสม</option> 
+									<option value="โนนสะอาด">โนนสะอาด</option> 
+									<option value="บ้านดุง">บ้านดุง</option> 
+									<option value="บ้านผือ">บ้านผือ</option> 
+									<option value="ประจักษ์ศิลปาคม">ประจักษ์ศิลปาคม</option> 
+									<option value="พิบูลย์รักษ์">พิบูลย์รักษ์</option> 
+									<option value="เพ็ญ">เพ็ญ</option> 
+									<option value="วังสามหมอ">วังสามหมอ</option> 
+									<option value="ศรีธาตุ">ศรีธาตุ</option> 
+									<option value="สร้างคอม">สร้างคอม</option> 
+									<option value="หนองบัวลำภู">หนองบัวลำภู</option> 
+									<option value="หนองวัวซอ">หนองวัวซอ</option> 
+									<option value="หนองแสง">หนองแสง</option> 
+									<option value="หนองหาน">หนองหาน</option> 
+									<option value="อำเภอสร้างคอม">อำเภอสร้างคอม</option> 
+								</select>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td width="35%" class="text-right pr-1">
+								ประเภททรัพย์: 
+							</td>
+							<td width="65%" class="pr-3">
+								<select class="search-box form-control" name="asset_type">
+									{% if search_a_type_text %}
+										<option value="{{ search_a_type_value }}" selected="">{{ search_a_type_text }}</option>
+									{% endif %}
+									<option value="001"> ที่ดินว่างเปล่า</option>
+									<option value="003"> ที่ดินพร้อมสิ่งปลูกสร้าง</option>
+									<option value="002"> ห้องชุด</option>
+									<option value="009"> สิ่งปลูกสร้าง</option>
+									<option value="0014"> สลากออมสิน</option>
+									<option value="0015"> สลากออมทรัพย์</option>
+									<option value="0010"> หุ้น</option>
+									<option value="0011"> หน่วยลงทุน</option>
+									<option value="0012"> พันธบัตร</option>
+									<option value="0013"> ใบสำคัญ</option>
+									<option value="004"> กรรมสิทธิ์ห้องชุด</option>
+									<option value="005"> สิทธิการเช่า</option>
+									<option value="006"> สิทธิการเช่าอาคารพาณิชย์</option>
+									<option value="007"> สิทธิการเช่าที่ดิน</option>
+									<option value="008"> ทรัพย์สินต่างๆ</option>
+									<option value="010"> สิทธิการเช่าที่ดินฯ</option>
+									<option value="011"> สิทธิการเช่าสิ่งปลูกสร้าง</option>
+									<option value="012"> บัตรธนาคาร(เป็นเงินที่ชำระหนี้ได้ตามกฎหมาย)</option>
+									<option value="013"> สิทธิการเช่าอาคารราชพัสดุ</option>
+									<option value="014"> สิทธิการเช่าอาคาร</option>
+									<option value="016"> สิทธิการไถ่คืน</option>
+									<option value="017"> สิทธิการเช่าช่วงที่ดิน</option>
+									<option value="018"> อาวุธปืน</option>
+									<option value="019"> บัตรเงินฝาก</option>
+									<option value="020"> ธนบัตร</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td width="35%" class="text-right pr-1">
+								ราคาต่ำสุด: 
+							</td>
+							<td width="65%" class="pr-3">
+								<input type="number" name="min_price" id="MinPrice" class="form-control ml-1" placeholder="ราคาต่ำสุด" value="{{ search_min_price }}">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td width="35%" class="text-right pr-1">
+								ราคาสูงสุด: 
+							</td>
+							<td width="65%" class="pr-3">
+								<input type="number" name="max_price" id="MaxPrice" class="form-control" placeholder="ราคาสูงสุด" value="{{ search_max_price }}">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td width="35%" class="text-right pr-1">
+								วันที่ประมูล: 
+							</td>
+							<td width="65%" class="pr-3">
+								<input type="text" name="bid_date" id="BidDate" class="form-control ml-1" placeholder="เช่น 31/12/2563" value="{{ search_bid_date }}" >
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6">
+				<div class="row">
+					<table width="100%">
+						<tr>
+							<td width="35%" class="text-right pr-1">
+							</td>
+							<td width="65%" class="pr-3">
+								<button type="submit" class="btn btn-primary">ค้นหา</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<h2>ผลการค้นหา พบ  รายการ</h2>
+	<table id="ResultTable" class="table">
+		<thead>
+			<tr>
+				<th scope="col">ลำดับที่</th>
+				<th scope="col">ล๊อตที่ - ชุดที่</th>
+				<th scope="col" title="deed_no">เลขที่ดิน</th>
+				<th scope="col">ลำดับขาย</th>
+				<th scope="col" title="law_suit_no">เลขคดี</th>
+				<th scope="col">ประเภท</th>
+				<th scope="col">ไร่</th>
+				<th scope="col">งาน</th>
+				<th scope="col">ตร.วา</th>
+				<th scope="col">ราคาประเมิน</th>
+				<th scope="col">ตำบล</th>
+				<th scope="col">อำเภอ</th>
+				<th scope="col">จังหวัด</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for asset in all_asset %}
+				<tr>
+					<td>{{ forloop.counter }}</td>
+					<td>{{ asset.a_lot_no }}</td>
+					<td class="row">
+						<div class="col px-0">
+							<a href="{% url 'viewmap-page' %}?province={{ asset.a_province_code }}&ampur={{ asset.a_ampur_code }}&deedno={{ asset.a_deed_no }}" target="_blank">{{ asset.a_deed_no }}</a>
+						</div>
+						{% if asset.is_chanode == "1" %}
+							<svg class="bi" width="32" height="32" fill="currentColor">
+								<use xlink:href="bootstrap-icons.svg#heart-fill"/>
+							</svg>
+							<siv class="col pl-1 text-warning text-left">โฉนด</siv>
+						{% endif %}
+					</td>
+					<td>{{ asset.a_sell_order }}</td>
+					<td>
+						<a target="_blank" href="http://asset.led.go.th/newbidreg/asset_open.asp?law_suit_no={{ asset.a_law_suit_no  }}&law_suit_year={{asset.a_law_suit_year }}&Law_Court_ID={{asset.a_law_court_id }}&deed_no={{ asset.a_deed_no }}&addrno=-">
+							{{ asset.a_law_suit }}
+						</a>
+					</td>
+					<td>{{ asset.a_type }}</td>
+					<td>{{ asset.a_rai }}</td>
+					<td>{{ asset.a_ngan }}</td>
+					<td>{{ asset.a_wa }}</td>
+					<td>{{ asset.a_price }}</td>
+					<td>{{ asset.a_tumbon }}</td>
+					<td>{{ asset.a_ampur }}</td>
+					<td>{{ asset.a_province }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% endblock content %}

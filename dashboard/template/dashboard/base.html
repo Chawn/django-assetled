@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-
+{% load static %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,7 +8,7 @@
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v4.1.1">
     <title>ระบบ</title>
-
+    <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/jumbotron/">
 
     <!-- Bootstrap core CSS -->
@@ -29,8 +29,12 @@
     <meta name="msapplication-config" content="https://getbootstrap.com/docs/4.5/assets/img/favicons/browserconfig.xml">
     <meta name="theme-color" content="#563d7c">
 
-
-    <style>
+    <!-- Jquery DatePicker -->
+    
+      <style type="text/css">
+        .block-content{
+            margin-top:30px;
+        }
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -51,8 +55,8 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#">Navbar</a>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-secondary">
+        <a class="navbar-brand" href="{% url 'home-page' %}">Assets L.E.D. Thailand</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
             aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -60,22 +64,18 @@
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home-page' %}">ค้นหาทรัพย์</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" href="{% url 'favorite-page' %}">ที่บันทึกไว้</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        aria-haspopup="true" aria-expanded="false">เว็บภายนอก</a>
                     <div class="dropdown-menu" aria-labelledby="dropdown01">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
+                        <a class="dropdown-item py-2" href="http://asset.led.go.th/newbidreg/" target="_blank">ค้นหาทรัพย์ในเว็บกรมบังคับคดี</a>
+                        <a class="dropdown-item py-2" href="http://dolwms.dol.go.th/tvwebp/" target="_blank">ระบบค้นหารูปแปลงที่ดิน (กรมที่ดิน)</a>
                     </div>
                 </li>
             </ul>
@@ -87,71 +87,10 @@
     </nav>
 
     <main role="main">
-
-        <!-- Main jumbotron for a primary marketing message or call to action -->
-        <div class="jumbotron">
-            <div class="container-fluid">
-                <h1 class="display-3">Hello, world!</h1>
-                <p>This is a template for a simple marketing or informational website. It includes a large callout
-                    called a jumbotron and three supporting pieces of content. Use it as a starting point to create
-                    something more unique.</p>
-                <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
-            </div>
-        </div>
-
-        <div class="container-fluid">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">ล๊อตที่ - ชุดที่</th>
-                        <th scope="col">เลขที่โฉนด</th>
-                        <th scope="col">ลำดับที่การขาย</th>
-                        <th scope="col">หมายเลขคดี</th>
-                        <th scope="col">ประเภททรัพย์</th>
-                        <th scope="col">ไร่</th>
-                        <th scope="col">งาน</th>
-                        <th scope="col">ตร.วา</th>
-                        <th scope="col">ราคาประเมิน</th>
-                        <th scope="col">ตำบล</th>
-                        <th scope="col">อำเภอ</th>
-                        <th scope="col">จังหวัด</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr> 
-                        <td> 
-                            อุดร1/64 - นัดแรก 21 ต.ค. 63
-                        </td>
-                        <td> 
-                            4163
-                        </td>
-                        <td> 
-                            1 - 1
-                        </td>
-                        <td> 
-                            1377/2544
-                        </td>
-                        <td> 
-                            ที่ดินว่างเปล่า
-                        </td>
-                        <td> 
-                            0
-                        </td>
-                        <td> 
-                            0
-                        </td>
-                        <td> 
-                            60
-                        </td>
-                        <td>
-                            36,000.00
-                        </td>                                                                     
-                        <td>บ้านขาว</td>
-                        <td>เมือง</td>
-                        <td>อุดรธานี</td>
-                    </tr>
-                </tbody>
-            </table>
+  
+        <div class="container-fluid block-content" >
+            {% block content %}
+            {% endblock content %}
         </div> <!-- /container -->
 
     </main>
