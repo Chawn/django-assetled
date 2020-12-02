@@ -1,18 +1,17 @@
-from logging import lastResort
 from django.db.models.query_utils import Q
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Asset
 
-def get_html_content(a_type, a_province, a_ampur, bid_date, min_price, max_price, search_page): #search_url
+def get_html_content(a_type, a_province, a_ampur, bid_date, min_price,max_price, page): #search_url
     import requests
     USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"
     LANGUAGE = "en-US,en;q=0.5"
-    # session = requests.Session()
-    # session.headers['User-Agent'] = USER_AGENT
-    # session.headers['Accept-Language'] = LANGUAGE
-    # session.headers['Content-Language'] = LANGUAGE
-    html = requests.get(f'http://asset.led.go.th/newbidreg/asset_search_province.asp?search_asset_type_id={a_type}&search_ampur={a_ampur}&search_province={a_province}&search_bid_date={bid_date}&search_price_begin={min_price}&search_price_end={max_price}&search_status=1&search=ok&page={search_page}')
+    session = requests.Session()
+    session.headers['User-Agent'] = USER_AGENT
+    session.headers['Accept-Language'] = LANGUAGE
+    session.headers['Content-Language'] = LANGUAGE
+    html = requests.get(f'http://asset.led.go.th/newbidreg/asset_search_province.asp?search_asset_type_id={a_type}&search_ampur={a_ampur}&search_province={a_province}&search_bid_date={bid_date}&search_price_begin={min_price}&search_price_end={max_price}&search_status=1&search=ok&page={page}')
     # html = requests.get(f'{searchUrl}')
     return html
 
@@ -34,9 +33,7 @@ def isChanode(law_suit_no, law_suit_year,Law_Court_ID,deed_no,addrno): #search_u
     # addrno = quote(addrno.encode('cp874'))
     law_suit_no  = law_suit_no.replace("b'","").replace("'","")
     response = requests.get(f'http://asset.led.go.th/newbidreg/asset_open.asp?law_suit_no={law_suit_no}&law_suit_year={law_suit_year}&Law_Court_ID={Law_Court_ID}&deed_no={deed_no}&addrno={addrno}')
-    # soup = BeautifulSoup(response.content, 'html.parser')
-    import lxml
-    soup = BeautifulSoup(response.content, 'lxml')
+    soup = BeautifulSoup(response.content, 'html.parser')
     # print(law_suit_no, law_suit_year, Law_Court_ID, deed_no, addrno)
     
     col_lg_7 = soup.findAll("div", {"class": "col-lg-7"})[2]
@@ -205,31 +202,22 @@ def Home(request):
     search_bid_date = ""
     search_min_price = ""
     search_max_price = ""
-    search_a_ampur_text = ""
     encoded_law_suit_no = ""
-    search_a_province_text = ""
-    search_a_ampur_text_encode = ""
-    all_page = "1"
-    last_page = "1"
-    search_page = "1"
+    last_page = 1
     if 'province' in request.GET:
-        search_a_province_text      = quote(request.GET.get('province').encode('cp874'))
-        search_a_ampur_text         = request.GET.get('ampur')
-        search_a_ampur_text_encode  = quote(request.GET.get('ampur').encode('cp874'))
-        search_a_ampur_value    = ampur_code[request.GET.get('ampur')]
-        search_a_type_value     = request.GET.get('asset_type')
-        search_a_type_text      = asset_type_code[request.GET.get('asset_type')]
-        search_bid_date         = request.GET.get('bid_date')
-        search_min_price        = request.GET.get('min_price')
-        search_max_price        = request.GET.get('max_price')
+        search_a_ampur_value = ampur_code[request.GET.get('ampur')]
+        search_a_type_value = request.GET.get('asset_type')
+        search_a_type_text = asset_type_code[request.GET.get('asset_type')]
+        search_bid_date = request.GET.get('bid_date')
+        search_min_price = request.GET.get('min_price')
+        search_max_price = request.GET.get('max_price')
 
-        a_province      = quote(request.GET.get('province').encode('cp874'))
-        a_ampur         = quote(request.GET.get('ampur').encode('cp874'))
-        a_type          = request.GET.get('asset_type')
-        bid_date        = request.GET.get('bid_date')
-        min_price       = request.GET.get('min_price')
-        max_price       = request.GET.get('max_price')
-        search_page     = request.GET.get('search_page')
+        a_province = quote(request.GET.get('province').encode('cp874'))
+        a_ampur = quote(request.GET.get('ampur').encode('cp874'))
+        a_type = request.GET.get('asset_type')
+        bid_date = request.GET.get('bid_date')
+        min_price = request.GET.get('min_price')
+        max_price = request.GET.get('max_price')
 
         mycol.delete_many({})
         
@@ -256,36 +244,10 @@ def Home(request):
         # titles = ['ล๊อตที่ - ชุดที่','เลขที่โฉนด','ลำดับที่การขาย','หมายเลขคดี','ประเภททรัพย์','ไร่','งาน','ตารางวา','ราคาประเมิน','ตำบล','อำเภอ','จังหวัด']
         # cvswriter = csv.writer(csvfile)
         # cvswriter.writerow(titles)
-        
-        # request.session['a_type'] = a_type
-        # request.session['a_province'] = a_province
-        # request.session['a_ampur'] = a_ampur
-        # request.session['bid_date'] = bid_date
-        # request.session['min_price'] = min_price
-        # request.session['max_price'] = max_price
-        
-        
-        response = get_html_content(a_type, a_province, a_ampur, bid_date, min_price, max_price, search_page)
+        page = 1
+        response = get_html_content(a_type, a_province, a_ampur, bid_date, min_price, max_price, page)
         html_content = response.content
         soup = BeautifulSoup(html_content, 'html.parser')
-        soup.prettify()
-        
-    
-        last_page = re.findall(f">หน้าที่ {str(search_page)}/.+</div>", str(soup))[0].replace(f">หน้าที่ {str(search_page)}/","").replace("</div>","")
-        # request.session['lastpage'] = last_page
-        print(f'last_page: {last_page}')
-        all_page = []
-        i = 1
-        while i <= int(last_page):
-            all_page.append(i)
-            i +=1
-
-        # print(f'last_page: {last_page}')
-        # last_page = re.findall(">หน้าที่ 0/.+<", str(soup))[0]
-        # print(f'Print: {last_page}')
-        # last_page = last_page.replace(">หน้าที่ 0/","").replace("<","")
-
-        
         data = []
         asset_dict = {}
         table = soup.find(id="box-table-a").find("table")
@@ -311,6 +273,8 @@ def Home(request):
                         data = data.replace('\n','')
                         data = data.replace('\t','')
                         data = data.replace('\xa0','')
+                        data = data.replace('&nbsp;','')
+                        data = data.replace(' ','')
                         asset_dict[fields[index]] = data.strip()
 
                 asset_dict['a_deed_no'] = deed_no
@@ -320,14 +284,13 @@ def Home(request):
                 asset_dict['a_law_suit_year'] = law_suit_year
                 asset_dict['a_law_court_id'] = law_court_id
                 asset_dict['a_ampur_code'] = ampur_code[asset_dict['a_ampur']]
-                asset_dict['is_chanode'] = "0"
-                # asset_dict['is_chanode'] = isChanode(
-                #                             asset_dict['a_law_suit_no'], 
-                #                             asset_dict['a_law_suit_year'], 
-                #                             asset_dict['a_law_court_id'], 
-                #                             asset_dict['a_deed_no'], 
-                #                             asset_dict['a_addrno']
-                #                             )
+                asset_dict['is_chanode'] = isChanode(
+                                            asset_dict['a_law_suit_no'], 
+                                            asset_dict['a_law_suit_year'], 
+                                            asset_dict['a_law_court_id'], 
+                                            asset_dict['a_deed_no'], 
+                                            asset_dict['a_addrno']
+                                            )
                 mycol.insert_one(asset_dict) 
                 asset_dict = {}
     
@@ -335,30 +298,31 @@ def Home(request):
             #     is_chanode = isChanode(asset.a_law_suit_no, asset.a_law_suit_year, asset.a_law_court_id, asset.a_deed_no, asset.a_addrno)
             #     Asset.objects.filter( Q(a_law_suit = asset.a_law_suit) and Q(a_deed_no = asset.a_deed_no)).update(is_chanode = is_chanode)
        
-    
-        
-    
+        try:
+            last_page = re.findall(">หน้าที่ 0/.+<", str(soup))[0]
+            last_page = last_page.replace(">หน้าที่ 0/","").replace("<","")
+        except:
+            last_page = 1
+            pass
+        # print(f'PRINT:{last_page}')
 
         asset_data = Asset.objects.all()
     else:
         asset_data = Asset.objects.all()
 
+    search_a_ampur_text = request.GET.get('ampur')
     if search_a_ampur_text=="":
         search_a_ampur_text = "-ทุกอำเภอ-"
 
     context = {
         'all_asset'     : asset_data , 
-        'search_a_province_text'        : search_a_province_text,
-        'search_a_ampur_text'           : search_a_ampur_text,
-        'search_a_ampur_text_encode'    : search_a_ampur_text_encode,
+        'search_a_ampur_text'  : search_a_ampur_text,
         'search_a_ampur_value' : search_a_ampur_value,
         'search_a_type_value'  : search_a_type_value,
         'search_a_type_text'   : search_a_type_text,
         'search_bid_date'      : search_bid_date,
         'search_min_price'     : search_min_price,
         'search_max_price'     : search_max_price,
-        'search_page'          : search_page,
-        'all_page'             : all_page,
         'last_page'            : last_page
     }
 
@@ -378,20 +342,17 @@ def ViewMap(request):
         driver.get('http://dolwms.dol.go.th/tvwebp/');
         # time.sleep(1) # Let the user actually see something!
         
-        time.sleep(1)
+        time.sleep(2)
         driver.find_element_by_class_name('bts-popup-close').click()
-        time.sleep(0.5)
+        time.sleep(2)
         Select(driver.find_element_by_id('ddlProvince')).select_by_value(province)
-        time.sleep(1)
+        time.sleep(2)
         Select(driver.find_element_by_id('ddlAmphur')).select_by_value(ampur)
         time.sleep(0.5)
         driver.find_element_by_id('txtPacelNo').send_keys(deedno)
         time.sleep(0.5)
         driver.find_element_by_id('btnFind').click()
     return render(request, 'dashboard/viewmap.html')
-
-def addFavorite(request):
-    return render(request, 'dashboard/favorite.html')
 
 def Favorite(request):
     # import pymongo

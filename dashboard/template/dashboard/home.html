@@ -4,8 +4,11 @@
 
 	<!-- TODO: ฟอร์มค้นหา -->
 <style>
-	#ResultTable a:visited {
+	#ResultTable a.external-link:visited {
 		color: #6d3390;
+	}
+	#ResultTable td{
+		vertical-align: middle!important;
 	}
 </style>
 	<form method="GET" action="" class=" mb-5">
@@ -113,7 +116,7 @@
 							<td width="65%" class="pr-3">
 								<select class="search-box form-control" id="Ampur" name="ampur">
 									{% if search_a_ampur_value %}
-										<option value="{{ search_a_ampur_value }}" selected="">{{ search_a_ampur_text }}</option>
+										<option value="{{ search_a_ampur_text }}" selected="">{{ search_a_ampur_text }}</option>
 									{% endif %}
 									<option value="">-ทุกอำเภอ-</option>
 									<option value="เมือง">เมือง</option> 
@@ -198,7 +201,7 @@
 								ราคาต่ำสุด: 
 							</td>
 							<td width="65%" class="pr-3">
-								<input type="number" name="min_price" id="MinPrice" class="form-control ml-1" placeholder="ราคาต่ำสุด" value="{{ search_min_price }}">
+								<input type="number" name="min_price" id="MinPrice" class="form-control " placeholder="ราคาต่ำสุด" value="{{ search_min_price }}">
 							</td>
 						</tr>
 					</table>
@@ -226,7 +229,7 @@
 								วันที่ประมูล: 
 							</td>
 							<td width="65%" class="pr-3">
-								<input type="text" name="bid_date" id="BidDate" class="form-control ml-1" placeholder="เช่น 31/12/2563" value="{{ search_bid_date }}" >
+								<input type="text" name="bid_date" id="BidDate" class="form-control" placeholder="เช่น 31/12/2563" value="{{ search_bid_date }}" >
 							</td>
 						</tr>
 					</table>
@@ -239,9 +242,20 @@
 					<table width="100%">
 						<tr>
 							<td width="35%" class="text-right pr-1">
+								หน้า: 
 							</td>
 							<td width="65%" class="pr-3">
-								<button type="submit" class="btn btn-primary">ค้นหา</button>
+								<div class="row">
+									<div class="col-3 pr-0">
+										<input type="text" class="form-control" id="SearchPage" name="search_page" value="{{ search_page }}">
+									</div>
+									<div class="col pt-2 pl-1">
+										/ {{ last_page }}
+									</div>
+									<div class="col-4">
+										<button type="submit" id="btnSubmit" class="btn btn-primary">ค้นหา</button>
+									</div>
+								</div>
 							</td>
 						</tr>
 					</table>
@@ -250,58 +264,142 @@
 		</div>
 	</form>
 
-	<h2>ผลการค้นหา พบ  รายการ</h2>
-	<table id="ResultTable" class="table">
-		<thead>
-			<tr>
-				<th scope="col">ลำดับที่</th>
-				<th scope="col">ล๊อตที่ - ชุดที่</th>
-				<th scope="col" title="deed_no">เลขที่ดิน</th>
-				<th scope="col">ลำดับขาย</th>
-				<th scope="col" title="law_suit_no">เลขคดี</th>
-				<th scope="col">ประเภท</th>
-				<th scope="col">ไร่</th>
-				<th scope="col">งาน</th>
-				<th scope="col">ตร.วา</th>
-				<th scope="col">ราคาประเมิน</th>
-				<th scope="col">ตำบล</th>
-				<th scope="col">อำเภอ</th>
-				<th scope="col">จังหวัด</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for asset in all_asset %}
-				<tr>
-					<td>{{ forloop.counter }}</td>
-					<td>{{ asset.a_lot_no }}</td>
-					<td class="row">
-						<div class="col px-0">
-							<a href="{% url 'viewmap-page' %}?province={{ asset.a_province_code }}&ampur={{ asset.a_ampur_code }}&deedno={{ asset.a_deed_no }}" target="_blank">{{ asset.a_deed_no }}</a>
-						</div>
-						{% if asset.is_chanode == "1" %}
-							<svg class="bi" width="32" height="32" fill="currentColor">
-								<use xlink:href="bootstrap-icons.svg#heart-fill"/>
-							</svg>
-							<siv class="col pl-1 text-warning text-left">โฉนด</siv>
-						{% endif %}
-					</td>
-					<td>{{ asset.a_sell_order }}</td>
-					<td>
-						<a target="_blank" href="http://asset.led.go.th/newbidreg/asset_open.asp?law_suit_no={{ asset.a_law_suit_no  }}&law_suit_year={{asset.a_law_suit_year }}&Law_Court_ID={{asset.a_law_court_id }}&deed_no={{ asset.a_deed_no }}&addrno=-">
-							{{ asset.a_law_suit }}
-						</a>
-					</td>
-					<td>{{ asset.a_type }}</td>
-					<td>{{ asset.a_rai }}</td>
-					<td>{{ asset.a_ngan }}</td>
-					<td>{{ asset.a_wa }}</td>
-					<td>{{ asset.a_price }}</td>
-					<td>{{ asset.a_tumbon }}</td>
-					<td>{{ asset.a_ampur }}</td>
-					<td>{{ asset.a_province }}</td>
+	<div class="row">
+		<div class="col text-left">
+			<strong>ผลการค้นหา พบ {{ all_asset.count }} รายการ</strong>
+			{% if search_a_province_text != "" %}
+			<a target="_blank" class="pl-2 " 
+				href="http://asset.led.go.th/newbidreg/asset_search_province.asp?
+				search_asset_type_id={{ search_a_type_value }}
+				&search_ampur={{ search_a_ampur_text_encode }}
+				&search_province={{ search_a_province_text }}
+				&search_bid_date={{ search_bid_date }}
+				&search_price_begin={{ search_min_price }}
+				&search_price_end={{ search_max_price }}
+				&search_status=1&search=ok&page={{ search_page }}">
+					[ดูการค้นหานี้ในเว็บกรมบังคับคี]
+			</a>
+			{% endif %}
+			<p>หน้า {{ search_page }}/{{ last_page }}</p>
+		</div>
+		<div class="col text-right">
+			<span class="pl-1">หน้า</span>
+			{% for i in all_page %}
+				<span class="pl-1 text-primary" onclick="gotoPage('{{ i }}')" style="cursor:pointer;">{{ i }}</span>
+			{%	endfor %}
+			<span class="pl-1 text-primary" onclick="gotoPage('{{ last_page }}')" style="cursor:pointer;">[หน้าสุดท้าย]</span>
+		</div>
+	</div>
+	
+	<br>
+	<div class="table-responsive-xl">
+		<table id="ResultTable" class="table table-sm table-hover">
+			<thead class="thead-dark">
+				<tr class="">
+					<th scope="col" class="text-center">#</th>
+					<th scope="col"></th>
+					<th scope="col">ล๊อตที่ - ชุดที่</th>
+					<th scope="col">ลำดับขาย</th>
+					<th scope="col" title="law_suit_no">เลขคดี</th>
+					<th scope="col" title="deed_no">เลขโฉนด</th>
+					<th scope="col">ประเภท</th>
+					<th scope="col" >ไร่</th>
+					<th scope="col" >งาน</th>
+					<th scope="col">ตร.วา</th>
+					<th scope="col" >ราคาประเมิน</th>
+					<th scope="col">ตำบล</th>
+					<th scope="col" >อำเภอ</th>
+					<th scope="col"  >จังหวัด</th>
 				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				{% for asset in all_asset %}
+					<tr>
+						<th scope="col" class="px-1 text-center">{{ forloop.counter }}</th>
+						<td>
+							<button class="btn btn-outline-success btn-sm disabled">บันทึก</button>
+							<button class="btn btn-outline-dander btn-sm">
+								<span class="material-icons" style="font-size: 1rem;">
+									delete
+								</span>
+							</button>
+						</td>
 
+						<td>{{ asset.a_lot_no }}</td>
+						<td>{{ asset.a_sell_order }}</td>
+						<td>
+							<a target="_blank" href="http://asset.led.go.th/newbidreg/asset_open.asp?law_suit_no={{ asset.a_law_suit_no  }}&law_suit_year={{asset.a_law_suit_year }}&Law_Court_ID={{asset.a_law_court_id }}&deed_no={{ asset.a_deed_no }}&addrno={{ asset.a_addrno }}"
+							class="external-link" >
+								<span class="material-icons" style="font-size: 1rem;">
+									photo
+								</span> 
+									{{ asset.a_law_suit }}
+							</a>
+						</td>
+						<td class="row">
+							<div class="col pl-0 pr-2 text-left">
+								{% if asset.is_chanode == "0" %}
+								<a href="{% url 'viewmap-page' %}?province={{ asset.a_province_code }}&ampur={{ asset.a_ampur_code }}&deedno={{ asset.a_deed_no }}" 
+									class="text-primary external-link"
+									target="_blank">
+									<!-- <span class="material-icons" style="font-size: 1.2rem;">
+										place
+									</span> -->
+									{{ asset.a_deed_no }}
+								</a>
+								<button onclick="CopytoClipboard('{{ asset.a_deed_no }}')" class="btn-clipboard btn btn-outline-primary btn-sm" data-toggle="tooltip" data-placement="top" data-original-title="Copy to clipboard">
+									<span class="material-icons" style="font-size: 1rem;">
+										content_copy
+									</span>
+								</button>
+								{% else %}
+									{{ asset.a_deed_no }}
+								{% endif %}	
+							</div>
+						</td>
+						<td>{{ asset.a_type }}</td>
+						<td>{{ asset.a_rai }}</td>
+						<td>{{ asset.a_ngan }}</td>
+						<td>{{ asset.a_wa }}</td>
+						<td>{{ asset.a_price }}</td>
+						<td>{{ asset.a_tumbon }}</td>
+						<td>{{ asset.a_ampur }}</td>
+						<td>{{ asset.a_province }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>	
+	</div>
+	<script>
+		$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip();
+			$('.btn-clipboard').bind('click', function() {
+				$('.btn-clipboard').attr('data-original-title', 'Copy to clipboard');
+				$('.btn-clipboard').removeClass('disabled')
+				
+				$(this).tooltip('hide')
+						.attr('data-original-title', 'Copied')
+						.tooltip('show');
+				
+				$(this).addClass('disabled')
+				
+				
+			});
+		});
+
+		
+		function gotoPage(page_no){
+			$("#SearchPage").val(page_no);
+			$("#btnSubmit").click();
+		}
+
+		function CopytoClipboard(text){
+			const el = document.createElement('textarea');
+				el.value = text;
+				document.body.appendChild(el);
+				el.select();
+				document.execCommand('copy');
+				document.body.removeChild(el);
+		}
+	</script>
 	{% endblock content %}

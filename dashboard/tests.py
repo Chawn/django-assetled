@@ -41,16 +41,18 @@ session = requests.Session()
 session.headers['User-Agent'] = USER_AGENT
 session.headers['Accept-Language'] = LANGUAGE
 session.headers['Content-Language'] = LANGUAGE
-response = requests.get('http://asset.led.go.th/newbidreg/asset_open.asp?law_suit_no=%BC%BA.662&law_suit_year=2557&Law_Court_ID=402&deed_no=117586&addrno=-')
+response = requests.get('http://asset.led.go.th/newbidreg/asset_search_province.asp?search_asset_type_id=001&search_tumbol=&search_ampur=&search_province=%CD%D8%B4%C3%B8%D2%B9%D5&search_sub_province=&search_price_begin=&search_price_end=200000&search_bid_date=&search_rai=&search_rai_if=1&search_quaterrai=&search_quaterrai_if=1&search_wa=&search_wa_if=1&search_status=1&search_person1=&search=ok')
 html_content = response.content
 soup = BeautifulSoup(html_content, 'html.parser')
-cardbody_row = soup.findAll("div", {"class": "card-body"})[0].findAll("div", {"class": "row"})[0]
-cardtext = cardbody_row.findAll("div", {"class": "card-text"})[4]
-chanode = re.findall("โฉนดเลขที่.+", str(cardtext))[0]
-if re.findall("โฉนดเลขที่", str(cardtext))[0]:
-    print(chanode)
-else:
-    print("Not Found Chanode")
+
+text = re.findall(">หน้าที่ 1/.+</div>", str(soup))[0].replace(">หน้าที่ 1/","").replace("</div>","")
+print(text)
+
+
+# if re.findall("โฉนดเลขที่", str(cardtext))[0]:
+#     print(chanode)
+# else:
+#     print("Not Found Chanode")
 
 # html = requests.get(f'{searchUrl}')
 # return status

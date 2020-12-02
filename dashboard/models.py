@@ -3,7 +3,8 @@ from django.db import models
 # Create your models here.
 class Asset(models.Model):
     a_lot_no = models.CharField(max_length=100)
-    a_deed_no= models.CharField(max_length=100)
+    a_deed_no = models.CharField(max_length=100)
+    a_addrno = models.CharField(max_length=100)
     a_sell_order = models.CharField(max_length=100)
     a_law_suit = models.CharField(max_length=100)
     a_type = models.CharField(max_length=100)
