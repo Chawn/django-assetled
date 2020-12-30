@@ -18,3 +18,16 @@ http://asset.led.go.th/newbidreg/asset_search_province.asp?search_asset_type_id=
 
 Local MongoDB Connect
 mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false
+
+Deploy to Heroku.com
+    heroku login
+    heroku create
+    heroku git:remote -a tranquil-river-23134   //tranquil-river-23134 is heroku app name
+    pip install gunicorn
+    gunicorn assetled.wsgi
+    touch Procfile
+        Add text to Procfile:  'web: gunicorn assetled.wsgi'   // remove (')
+    heroku local   
+    pip freeze > requirements.txt
+    git add .   
+
