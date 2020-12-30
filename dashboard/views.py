@@ -222,14 +222,14 @@ def Home(request):
         search_bid_date         = request.GET.get('bid_date')
         search_min_price        = request.GET.get('min_price')
         search_max_price        = request.GET.get('max_price')
-
         a_province      = quote(request.GET.get('province').encode('cp874'))
         a_ampur         = quote(request.GET.get('ampur').encode('cp874'))
         a_type          = request.GET.get('asset_type')
         bid_date        = request.GET.get('bid_date')
         min_price       = request.GET.get('min_price')
         max_price       = request.GET.get('max_price')
-        search_page     = request.GET.get('search_page')
+        if 'search_page' in request.GET:
+            search_page = request.GET.get('search_page')
 
         mycol.delete_many({})
         
@@ -388,6 +388,7 @@ def ViewMap(request):
         driver.find_element_by_id('txtPacelNo').send_keys(deedno)
         time.sleep(0.5)
         driver.find_element_by_id('btnFind').click()
+        time.sleep(1)
     return render(request, 'dashboard/viewmap.html')
 
 def addFavorite(request):

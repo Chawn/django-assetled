@@ -10,7 +10,6 @@
 
 .datepicker {
 	padding: 4px;
-	margin-top: 1px;
 	.border-radius(4px);
 	&-inline {
 		width: 220px;
@@ -99,6 +98,7 @@
 		&.today.disabled:hover {
 			@todayBackground: lighten(@orange, 30%);
 			.buttonBackground(@todayBackground, spin(@todayBackground, 20));
+			color: #000 !important;
 		}
 		&.active,
 		&.active:hover,
@@ -154,6 +154,18 @@
 	/*.dow {
 		border-top: 1px solid #ddd !important;
 	}*/
+
+	// Basic styling for calendar-week cells
+	.cw {
+		font-size: 10px;
+		width: 12px;
+		padding: 0 2px 0 5px;
+		vertical-align: middle;
+	}
+	thead tr:first-child th.cw {
+		cursor: default;
+		background-color: transparent;
+	}
 }
 .input-append,
 .input-prepend {
