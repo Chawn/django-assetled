@@ -32,3 +32,4 @@ Deploy to Heroku.com
     git add .   
     git commit -m "added procfile and requirements"
     git push heroku master
+    s
