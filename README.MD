@@ -30,4 +30,5 @@ Deploy to Heroku.com
     heroku local   
     pip freeze > requirements.txt
     git add .   
-
+    git commit -m "added procfile and requirements"
+    git push heroku master
